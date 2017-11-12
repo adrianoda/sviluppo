@@ -110,6 +110,7 @@ feature
 		ensure
 			gutter_game(Result) and
 			all_ones(Result)
+			-- TODO add other checks
 		end
 
 end
