@@ -54,7 +54,7 @@ feature {NONE}
 				frame_index := frame_index + 2
 			end
 		end
-		Result := not in_scope or s = 0
+		Result := in_scope and s = 0
 	end
 
 	all_ones(s : INTEGER) : BOOLEAN
@@ -71,7 +71,7 @@ feature {NONE}
 				frame_index := frame_index + 2
 			end
 		end
-		Result := not in_scope or s = 20
+		Result := in_scope and s = 20
 	end
 
 
@@ -82,10 +82,16 @@ feature
 		end
 
 	roll(pins : INTEGER)
-		require pins >= 0 and pins <= 10
+		require
+			slayed_pins: pins >= 0 and pins <= 10
 		do
 			rolls[current_roll] := pins
 			current_roll := current_roll + 1
+		ensure
+			current_roll_saved: rolls[current_roll-1] = pins
+			number_of_rolls: current_roll > 0 and current_roll <= 20
+			next_roll_empty: rolls[current_roll] + pins = pins
+			adjacent_roll_value: (rolls[current_roll-1] + pins) <= 20
 		end
 
 	score : INTEGER
@@ -108,8 +114,8 @@ feature
 			print("Score " + s.out + "%N")
 			Result := s
 		ensure
-			gutter_game(Result) and
-			all_ones(Result)
+			uncle_bob: gutter_game(Result) or
+					   all_ones(Result)
 			-- TODO add other checks
 		end
 
