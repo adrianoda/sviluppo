@@ -114,8 +114,8 @@ feature
 			print("Score " + s.out + "%N")
 			Result := s
 		ensure
-			uncle_bob: gutter_game(Result) or
-					   all_ones(Result)
+			score_value: Result >= 0 and Result <= 300
+			--uncle_bob: gutter_game(Result) or all_ones(Result)
 			-- TODO add other checks
 		end
 
