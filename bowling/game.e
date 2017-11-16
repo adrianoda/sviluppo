@@ -89,9 +89,10 @@ feature
 			current_roll := current_roll + 1
 		ensure
 			current_roll_saved: rolls[current_roll-1] = pins
-			number_of_rolls: current_roll > 0 and current_roll <= 20
+			positive_rolls: current_roll > 0
+			rolls_not_exceeded: current_roll <= 20
 			next_roll_empty: rolls[current_roll] + pins = pins
-			adjacent_roll_value: (rolls[current_roll-1] + pins) <= 20
+			adjacent_roll_value_consistent: (rolls[current_roll-1] + pins) <= 20
 		end
 
 	score : INTEGER
@@ -114,7 +115,8 @@ feature
 			print("Score " + s.out + "%N")
 			Result := s
 		ensure
-			score_value: Result >= 0 and Result <= 300
+			positive_score: Result >= 0
+			score_not_exeeded: Result <= 300
 			--uncle_bob: gutter_game(Result) or all_ones(Result)
 			-- TODO add other checks
 		end
