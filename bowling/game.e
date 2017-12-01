@@ -78,7 +78,7 @@ feature {NONE}
 feature
 	make
 		do
-			create rolls.make_filled (0, 0, 21s)
+			create rolls.make_filled (0, 0, 21)
 		end
 
 	roll(pins : INTEGER)
@@ -89,7 +89,7 @@ feature
 			current_roll := current_roll + 1
 		ensure
 			rolls_increased: current_roll = old current_roll + 1
-			rolls_not_exceeded: current_roll <= 20
+			rolls_not_exceeded: current_roll <= 21
 			current_roll_saved: rolls[old current_roll] = pins
 			next_roll_empty: rolls[current_roll] + pins = pins
 		end

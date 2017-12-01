@@ -88,6 +88,15 @@ feature -- Test routines
 			assert ("expecting score 275", game.score = 275)
 		end
 
+	test_last_strike
+		do
+			roll_many(18, 1)
+			roll_strike
+			game.roll (10)
+			game.roll (10)
+			assert ("expecting score 48", game.score = 48)
+		end
+
 end
 
 
