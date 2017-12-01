@@ -83,16 +83,15 @@ feature
 
 	roll(pins : INTEGER)
 		require
-			slayed_pins: pins >= 0 and pins <= 10
+			pins_number_not_exceeded: pins >= 0 and pins <= 10
 		do
 			rolls[current_roll] := pins
 			current_roll := current_roll + 1
 		ensure
-			current_roll_saved: rolls[current_roll-1] = pins
-			positive_rolls: current_roll > 0
+			rolls_increased: current_roll = old current_roll + 1
 			rolls_not_exceeded: current_roll <= 20
+			current_roll_saved: rolls[old current_roll] = pins
 			next_roll_empty: rolls[current_roll] + pins = pins
-			adjacent_roll_value_consistent: (rolls[current_roll-1] + pins) <= 20
 		end
 
 	score : INTEGER
