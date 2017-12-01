@@ -39,41 +39,6 @@ feature {NONE}
 		Result := rolls[frame_index + 1] + rolls[frame_index + 2]
 	end
 
-	-- score ensure checks
-	gutter_game(s : INTEGER) : BOOLEAN
-	local
-		frame_index : INTEGER
-		in_scope : BOOLEAN
-	do
-		in_scope := TRUE
-		across 0 |..| 9 as frame loop
-			if is_strike(frame_index) or is_spare(frame_index) or rolls[frame_index] > 0 or rolls[frame_index+1] > 0 then
-				-- out of scope
-				in_scope := FALSE
-			else
-				frame_index := frame_index + 2
-			end
-		end
-		Result := in_scope and s = 0
-	end
-
-	all_ones(s : INTEGER) : BOOLEAN
-	local
-		frame_index : INTEGER
-		in_scope : BOOLEAN
-	do
-		in_scope := TRUE
-		across 0 |..| 9 as frame loop
-			if is_strike(frame_index) or is_spare(frame_index) or rolls[frame_index] /= 1 or rolls[frame_index+1] /= 1 then
-				-- out of scope
-				in_scope := FALSE
-			else
-				frame_index := frame_index + 2
-			end
-		end
-		Result := in_scope and s = 20
-	end
-
 
 feature
 	make
@@ -116,8 +81,51 @@ feature
 		ensure
 			positive_score: Result >= 0
 			score_not_exeeded: Result <= 300
-			--uncle_bob: gutter_game(Result) or all_ones(Result)
-			-- TODO add other checks
+			score_value: Result = pins_score + bonus_score
+		end
+
+	pins_score : INTEGER
+		local
+			s : INTEGER
+			frame_index : INTEGER
+			frame_len : INTEGER
+		do
+			frame_len := 19
+			from frame_index := 0
+			until
+				frame_index > frame_len
+			loop
+				s := s + rolls[frame_index]
+				if rolls[frame_index] = 10 then
+					frame_len := frame_len -1
+				end
+				frame_index := frame_index + 1
+			end
+			Result := s
+		end
+
+	bonus_score : INTEGER
+		local
+			s : INTEGER
+			frame_index : INTEGER
+			frame_len : INTEGER
+		do
+			frame_len := 19
+			from frame_index := 0
+			until
+				frame_index > frame_len
+			loop
+				-- Strike bonux
+				if rolls[frame_index] = 10 then
+					s := s + rolls[frame_index + 1] + rolls[frame_index + 2]
+					frame_len := frame_len -1
+				-- Spare bonux
+				elseif (rolls[frame_index] + rolls[frame_index + 1]) = 10 then
+					s := s + rolls[frame_index + 2]
+				end
+				frame_index := frame_index + 1
+			end
+			Result := s
 		end
 
 end
