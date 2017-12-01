@@ -78,7 +78,7 @@ feature {NONE}
 feature
 	make
 		do
-			create rolls.make_filled (0, 0, 20)
+			create rolls.make_filled (0, 0, 21s)
 		end
 
 	roll(pins : INTEGER)
